@@ -3,11 +3,13 @@ import React, { useState } from 'react'
 import { Appbar } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { Button, Text, Dialog, Portal, Provider, RadioButton } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 
 
 
 const Header = () => {
+    const navigation = useNavigation();
     const [visibleDialog, setvisibleDialog] = useState(false)
 
     return (
@@ -21,19 +23,19 @@ const Header = () => {
                         <View style={{ flexDirection: 'row' }}>
                             <RadioButton
                                 value="first"
-                                status={'checked'}                                
+                                status={'checked'}
                                 onPress={() => setChecked('first')}
                             />
-                            <Text style={{paddingTop: 7}}>Weekly</Text>
+                            <Text style={{ paddingTop: 7 }}>Weekly</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <RadioButton
                                 value="first"
                                 status={'unchecked'}
-                                
+
                                 onPress={() => setChecked('first')}
                             />
-                            <Text style={{paddingTop: 7}}>Monthly</Text>
+                            <Text style={{ paddingTop: 7 }}>Monthly</Text>
                         </View>
                     </Dialog.Content>
                     <Dialog.Actions>
@@ -43,8 +45,12 @@ const Header = () => {
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
+            
             <Appbar style={styles.bottom}>
-                <Appbar.BackAction onPress={() => { }} />
+                <Appbar.Action icon="menu" onPress={() => {
+                 navigation.openDrawer();
+                    
+                }} />
                 <Appbar.Content title="Title" subtitle="Subtitle" />
                 <Appbar.Action icon="dots-vertical" onPress={() => {
                     setvisibleDialog(true)

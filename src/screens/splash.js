@@ -7,7 +7,7 @@ const Splash = ({ navigation }) => {
         setTimeout(() => {
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Home' }],
+                routes: [{ name: 'DrawerNav' }],
             });
         }, 3000);
     }, []);
