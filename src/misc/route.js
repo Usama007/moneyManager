@@ -66,7 +66,7 @@ const route = () => {
                     headerShown: false
                 }} component={DrawerNav} />
                 <Stack.Screen name="ExpenseForm" options={{
-                    title: 'Add new',
+                    title: 'Add New Expense',
                     headerStyle: {
                         backgroundColor: '#6200ee',
 

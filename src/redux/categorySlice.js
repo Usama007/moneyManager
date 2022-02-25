@@ -6,11 +6,11 @@ export const categorySlice = createSlice({
     name: 'category',
     initialState,
     reducers: {
-        add: (state, action) => {
+        addCategory: (state, action) => {
             return state;
         }
     }
 })
 
-export const { addExpense } = categorySlice.actions
+export const { addCategory } = categorySlice.actions
 export default categorySlice.reducer
