@@ -24,35 +24,43 @@ const ExpenseForm = ({ navigation }) => {
   const [note, setnote] = useState('')
   const [visibleSnackbar, setvisibleSnackbar] = useState(false);
   const [SnackbarMessage, setSnackbarMessage] = useState('')
-  const [date, setDate] = useState()
+  const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
 
 
-  // useEffect(() => {
-  //   console.warn(expense);
-  // }, [expense])
-  
+  useEffect(() => {
+    console.log(expense);
+  }, [expense])
+
 
   const onPressSubmit = () => {
     if (amount <= 0) {
       setSnackbarMessage('Amount cannot be 0 or empty');
       setvisibleSnackbar(true);
       return;
-    }else if(date == undefined){
-      setSnackbarMessage('Select Expense Date');
+    } else if (note == '') {
+      setSnackbarMessage('Note cannot be empty');
       setvisibleSnackbar(true);
       return;
     }
 
     let payload = {
-      id: Math.floor(Math.random() * (2000 - 37) ) + 37,
       category: selectedCategory,
-      amount: amount,
-      date: date,
-      text: note
+      data: {
+        id: Math.floor(Math.random() * (2000 - 37)) + 37,
+        amount: amount,
+        date: date,
+        text: note
+      }
     }
     dispatch(addExpense(payload))
-    
+    setSnackbarMessage('Successfully added');
+    setvisibleSnackbar(true);
+
+    // setTimeout(() => {
+    //  navigation.goBack()
+    // }, 5000);
+
   }
 
   return (
@@ -74,7 +82,7 @@ const ExpenseForm = ({ navigation }) => {
           </Picker>
           <Divider />
           <List.Item
-            title={date == undefined ? 'Select Date' : `Selected Date: ${date.getDate()}/${date.getDay()}/${date.getFullYear()}`}
+            title={date == undefined ? 'Select Date' : `Selected Date: ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`}
             onPress={() => {
               setOpen(true)
             }}
@@ -99,10 +107,11 @@ const ExpenseForm = ({ navigation }) => {
             modal
             mode='date'
             open={open}
-            date={date == undefined ? new Date() : date}
+            date={date}
+            maximumDate={new Date()}
             onConfirm={(date) => {
-              setOpen(false)
               setDate(date)
+              setOpen(false)
             }}
             onCancel={() => {
               setOpen(false)

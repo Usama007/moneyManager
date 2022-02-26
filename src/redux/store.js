@@ -9,7 +9,7 @@ import categorySlice from './categorySlice';
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    blacklist: ['expense','category']
+    blacklist: ['category','expense']
 };
 
 const reducers = combineReducers({
