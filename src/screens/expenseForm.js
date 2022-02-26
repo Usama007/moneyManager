@@ -19,7 +19,7 @@ const ExpenseForm = ({ navigation }) => {
   const dispatch = useDispatch();
   const category = useSelector(state => state.category)
   const expense = useSelector(state => state.expense)
-  const [selectedCategory, setselectedCategory] = useState(category[0]);
+  const [selectedCategory, setselectedCategory] = useState(category.categoryList[0]);
   const [amount, setamount] = useState(0)
   const [note, setnote] = useState('')
   const [visibleSnackbar, setvisibleSnackbar] = useState(false);
@@ -28,9 +28,9 @@ const ExpenseForm = ({ navigation }) => {
   const [open, setOpen] = useState(false)
 
 
-  useEffect(() => {
-    console.log(expense);
-  }, [expense])
+  // useEffect(() => {
+  //   console.warn(selectedCategory);
+  // }, [])
 
 
   const onPressSubmit = () => {
@@ -53,6 +53,8 @@ const ExpenseForm = ({ navigation }) => {
         text: note
       }
     }
+
+  
     dispatch(addExpense(payload))
     setSnackbarMessage('Successfully added');
     setvisibleSnackbar(true);
@@ -63,6 +65,8 @@ const ExpenseForm = ({ navigation }) => {
 
   }
 
+ 
+
   return (
     <View style={{ flex: 1 }}>
       <Card>
@@ -70,15 +74,24 @@ const ExpenseForm = ({ navigation }) => {
           <Picker
             style={{ margin: 0 }}
             selectedValue={selectedCategory}
-            onValueChange={(itemValue, itemIndex) =>
-              setselectedCategory(itemValue)
+            onValueChange={(itemValue, itemIndex) => {
+              if (itemValue == 'NewCategory') {
+                navigation.navigate('CategoryEntryForm')
+              } else {
+                setselectedCategory(itemValue)
+              }
+            }
+
             }>
             {
-              category.map((item) => (
+              category.categoryList.map((item) => (
                 <Picker.Item key={(item, index) => { return item + "_" + index }} label={item} value={item} />
 
               ))
             }
+
+            <Picker.Item label={'Add New Category'} value={'NewCategory'} />
+
           </Picker>
           <Divider />
           <List.Item
@@ -133,7 +146,7 @@ const ExpenseForm = ({ navigation }) => {
 
         <Card.Actions>
           <Button onPress={() => { navigation.goBack() }}>Cancel</Button>
-          {category.length > 0 && (
+          {category.categoryList.length > 0 && (
             <Button onPress={onPressSubmit}>Submit</Button>
           )}
         </Card.Actions>

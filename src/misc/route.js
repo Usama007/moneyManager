@@ -12,14 +12,20 @@ import {
 import Home from '../screens/home';
 import Splash from '../screens/splash';
 import ExpenseForm from '../screens/expenseForm';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import ExpenseList from '../screens/categoryEntryForm';
+import { changeCurrentCategory } from '../redux/categorySlice';
+import CategoryEntryForm from '../screens/categoryEntryForm';
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
 const DrawerNav = ({ navigation }) => {
-    const category = useSelector(state => state.category)
+    const dispatch = useDispatch();
+
+    const categories = useSelector(state => state.category.categoryList)
 
     useEffect(() => {
     }, [])
@@ -31,16 +37,18 @@ const DrawerNav = ({ navigation }) => {
             drawerContent={(props) => {
                 return (
                     <DrawerContentScrollView {...props} >
-                        <DrawerItemList {...props} />                       
+                        <DrawerItemList {...props} />
                         {
 
-                            category.map((item) => (
+                            categories.map((item) => (
                                 <DrawerItem
                                     label={item}
-                                    onPress={() => navigation.navigate("Splash")}
+                                    onPress={() => {
+                                        dispatch(changeCurrentCategory(item));
+                                        props.navigation.closeDrawer()
+                                    }}
                                 />
-                            ))
-                        }
+                            ))}
 
                     </DrawerContentScrollView>
                 )
@@ -48,7 +56,8 @@ const DrawerNav = ({ navigation }) => {
 
 
         >
-            <Drawer.Screen name="Home" options={{ headerShown: false }} component={Home} />
+            <Drawer.Screen name="Home" options={{ headerShown: false,drawerActiveBackgroundColor:'#fff',drawerActiveTintColor:'#000',title:'All' }} component={Home} />
+            {/* <Drawer.Screen name="ExpenseList" options={{ headerShown: false, drawerItemStyle: { display: 'none' } }} component={ExpenseList} /> */}
 
 
         </Drawer.Navigator>
@@ -72,6 +81,13 @@ const route = () => {
 
                     }, headerTintColor: '#fff'
                 }} component={ExpenseForm} />
+                <Stack.Screen name="CategoryEntryForm" options={{
+                    title: 'Add New Category',
+                    headerStyle: {
+                        backgroundColor: '#6200ee',
+
+                    }, headerTintColor: '#fff'
+                }} component={CategoryEntryForm} />
 
             </Stack.Navigator>
         </NavigationContainer>

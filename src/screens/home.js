@@ -1,22 +1,45 @@
-import { View, StyleSheet, Text, FlatList } from 'react-native'
+import { View, StyleSheet, Text, FlatList, ScrollView } from 'react-native'
 import React from 'react'
 import Header from '../components/header';
 import { Dialog, FAB, Portal, Provider, RadioButton, Button, Title, Divider, Headline } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import ExpenseListItem from '../components/expenseListItem';
 import { useEffect } from 'react';
+import { changeCurrentCategory } from '../redux/categorySlice';
 
 
 
 const Home = ({ navigation }) => {
+  const dispatch = useDispatch();
   const expense = useSelector(state => state.expense)
+  const category = useSelector(state => state.category)
   const [visibleDialog, setvisibleDialog] = useState(false)
+  const [expenseList, setexpenseList] = useState([])
 
 
   useEffect(() => {
-    console.log(expense);
-  }, [expense])
+    if (category.currentCategory != 'All') {
+      for (let a in expense) {
+        if (a == category.currentCategory) {
+          // console.warn(expense[a]);
+          setexpenseList(expense[a])
+        }
+      }
+    }
+  }, [category.currentCategory])
+
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('drawerItemPress', (e) => {
+      // Prevent default behavior
+      e.preventDefault();
+      dispatch(changeCurrentCategory('All'));
+      navigation.closeDrawer();
+
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const RenderDialog = () => {
     return (
@@ -57,37 +80,40 @@ const Home = ({ navigation }) => {
   return (
     <Provider >
       <RenderDialog />
-      <Header showDialog={() => setvisibleDialog(true)} />
+      <Header showDialog={() => setvisibleDialog(true)} title={category.currentCategory} />
+      <ScrollView>
+        {category.currentCategory == "All" ? (
+          <>
+            {
+              Object.keys(expense).map(function (key) {
+                return (
+                  <View style={{ margin: 5 }}>
+                    <Headline>{key}</Headline>
+                    <Divider />
 
-      {Object.keys(expense).map(function (key) {
-        return (
-          <View style={{margin: 5}}>
-            <Headline>{key}</Headline>
+                    {expense[key].map((item) => (
+                      <ExpenseListItem key={item.id} item={item} />
+                    ))
+                    }
+                  </View>
+                )
+              })
+            }
+          </>
+        ) : (<>
+          <View style={{ margin: 5 }}>
+            <Headline>{category.currentCategory}</Headline>
             <Divider />
-            <FlatList
-              data={expense[key]}
-              keyExtractor={item => item.id}
-              renderItem={({ item }) =>
-              (
-                <ExpenseListItem item={item} />
-              )
-              }
-            />
+
+            {expenseList.map((item) => (
+              <ExpenseListItem key={item.id} item={item} />
+            ))
+            }
           </View>
-        )
-      })
-      }
 
+        </>)}
 
-      {/* <FlatList
-        data={expense}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) =>
-        (
-          <ExpenseListItem item={item} />
-        )
-        }
-      /> */}
+      </ScrollView>
       <FAB
         style={styles.fab}
         small

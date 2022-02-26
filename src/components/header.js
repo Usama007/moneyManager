@@ -6,14 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
-const Header = ({showDialog}) => {
+const Header = ({showDialog,title}) => {
     const navigation = useNavigation();
     return (
         <Appbar>
             <Appbar.Action icon="menu" onPress={() => {
                 navigation.openDrawer();
             }} />
-            <Appbar.Content title="Title" subtitle="Subtitle" />
+            <Appbar.Content title={title} />
             <Appbar.Action icon="dots-vertical" onPress={showDialog} />
         </Appbar>
      
