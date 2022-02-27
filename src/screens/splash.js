@@ -1,9 +1,13 @@
 import { View, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { changeCurrentCategory } from '../redux/categorySlice';
 
 const Splash = ({ navigation }) => {
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(changeCurrentCategory('All'));
         setTimeout(() => {
             navigation.reset({
                 index: 0,

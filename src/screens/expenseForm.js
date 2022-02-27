@@ -1,18 +1,13 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React from 'react'
-import { TextInput, Button, Card, Title, Snackbar, Divider } from 'react-native-paper';
+import { TextInput, Button, Card,  Snackbar, Divider } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import DatePicker from 'react-native-date-picker'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { List } from 'react-native-paper';
-import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addExpense } from '../redux/expenseSlice';
-
-
-
 
 
 const ExpenseForm = ({ navigation }) => {
@@ -26,11 +21,6 @@ const ExpenseForm = ({ navigation }) => {
   const [SnackbarMessage, setSnackbarMessage] = useState('')
   const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
-
-
-  // useEffect(() => {
-  //   console.warn(selectedCategory);
-  // }, [])
 
 
   const onPressSubmit = () => {
@@ -59,9 +49,9 @@ const ExpenseForm = ({ navigation }) => {
     setSnackbarMessage('Successfully added');
     setvisibleSnackbar(true);
 
-    // setTimeout(() => {
-    //  navigation.goBack()
-    // }, 5000);
+    setTimeout(() => {
+     navigation.goBack()
+    }, 5000);
 
   }
 

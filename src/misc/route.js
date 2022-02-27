@@ -1,4 +1,4 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text } from 'react-native'
 import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,28 +7,23 @@ import {
     DrawerContentScrollView,
     DrawerItemList,
     DrawerItem,
+    useDrawerStatus
 } from '@react-navigation/drawer';
-
-import Home from '../screens/home';
 import Splash from '../screens/splash';
+import Home from '../screens/home';
 import ExpenseForm from '../screens/expenseForm';
-import { useDispatch, useSelector } from 'react-redux';
-import ExpenseList from '../screens/categoryEntryForm';
-import { changeCurrentCategory } from '../redux/categorySlice';
 import CategoryEntryForm from '../screens/categoryEntryForm';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { changeCurrentCategory } from '../redux/categorySlice';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
+const DrawerNav = () => {
 
-const DrawerNav = ({ navigation }) => {
     const dispatch = useDispatch();
-
     const categories = useSelector(state => state.category.categoryList)
 
-    useEffect(() => {
-    }, [])
 
 
 
@@ -44,8 +39,9 @@ const DrawerNav = ({ navigation }) => {
                                 <DrawerItem
                                     label={item}
                                     onPress={() => {
-                                        dispatch(changeCurrentCategory(item));
                                         props.navigation.closeDrawer()
+                                        dispatch(changeCurrentCategory(item));
+                                        
                                     }}
                                 />
                             ))}
@@ -53,45 +49,29 @@ const DrawerNav = ({ navigation }) => {
                     </DrawerContentScrollView>
                 )
             }}
-
-
         >
-            <Drawer.Screen name="Home" options={{ headerShown: false,drawerActiveBackgroundColor:'#fff',drawerActiveTintColor:'#000',title:'All' }} component={Home} />
-            {/* <Drawer.Screen name="ExpenseList" options={{ headerShown: false, drawerItemStyle: { display: 'none' } }} component={ExpenseList} /> */}
-
-
+            <Drawer.Screen options={{ headerShown: false, drawerActiveBackgroundColor: '#fff', drawerActiveTintColor: '#000', title: 'All' }} name="Home" component={Home} />
         </Drawer.Navigator>
     )
 
+
 }
 
-
-const route = () => {
+const Route = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen name="Splash" options={{ headerShown: false }} component={Splash} />
-                <Stack.Screen name="DrawerNav" options={{
-                    headerShown: false
-                }} component={DrawerNav} />
-                <Stack.Screen name="ExpenseForm" options={{
-                    title: 'Add New Expense',
-                    headerStyle: {
-                        backgroundColor: '#6200ee',
-
-                    }, headerTintColor: '#fff'
-                }} component={ExpenseForm} />
-                <Stack.Screen name="CategoryEntryForm" options={{
-                    title: 'Add New Category',
-                    headerStyle: {
-                        backgroundColor: '#6200ee',
-
-                    }, headerTintColor: '#fff'
-                }} component={CategoryEntryForm} />
-
+                <Stack.Screen name="DrawerNav" options={{ headerShown: false }} component={DrawerNav} />
+                <Stack.Screen name="ExpenseForm" options={{ headerTintColor:'#fff',headerStyle:{
+                    backgroundColor:'#6200ee'
+                }  }} component={ExpenseForm} />
+                <Stack.Screen name="CategoryEntryForm" options={{ headerTintColor:'#fff',headerStyle:{
+                    backgroundColor:'#6200ee'
+                }  }} component={CategoryEntryForm} />
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
 
-export default route
+export default Route
