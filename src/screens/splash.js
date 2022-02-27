@@ -2,6 +2,7 @@ import { View, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { changeCurrentCategory } from '../redux/categorySlice';
+import { Paragraph } from 'react-native-paper';
 
 const Splash = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -22,10 +23,11 @@ const Splash = ({ navigation }) => {
                 source={require('../assets/images/splash.png')}
                 style={styles.image}
             />
+            <Paragraph style={styles.paragragh}>MONEY MANAGER</Paragraph>
             <ActivityIndicator
                 size="large"
-                color="#00aeef"
-                style={{ justifyContent: 'flex-end' }}
+                color="#6200ee"
+                style={styles.loader}
             />
         </View>
     );
@@ -44,6 +46,13 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
 
     },
+    paragragh:{
+        textAlign:'center',
+        color:'#7a8692'
+    },
+    loader:{
+        justifyContent: 'flex-end'
+    }
 });
 
 
